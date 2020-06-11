@@ -7,7 +7,8 @@
     <meta charset="utf-8">
     <meta name=viewport content="width=device-width, initial-scale=1.0">
     <link rel=stylesheet type="text/css" href="style.css">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
+</head>
 <body ng-app=MyBtns ng-controller=PlayerController>
 <div class=bg></div>
 <br>
@@ -20,11 +21,11 @@
                 <div ng-animate="'animate'" ng-repeat="y in x" class=innerinputs uk-grid>
                     <div class="{{isChecked[btnsjson.indexOf(x)]}}">
                         <div class=border><i class="fa fa-times closebtn" aria-hidden=true ng-click="removeBtn($event)" data_index="{{btnsjson.indexOf(x)}} {{x.indexOf(y)}}"></i>
-                            <div style="padding-left: 5px;padding-right: 5px;"><i class="fa fa-check pos-abs success" ng-show=buttonName.length aria-hidden=true></i>
-                                <input class="form-control inputelems" placeholder="عنوان دکمه" value="{{y.text}}" name=buttonName ng-change="btnsjson[{{btnsjson.indexOf(x)}}][{{x.indexOf(y)}}].text = buttonName" ng-model=buttonName> </div>
+                            <div style="padding-left: 5px;padding-right: 5px;"><!--<i class="fa fa-check pos-abs success" ng-show=buttonName.length aria-hidden=true></i>-->
+                                <input class="form-control inputelems" placeholder="عنوان دکمه" name=buttonName ng-change="btnsjson[{{btnsjson.indexOf(x)}}][{{x.indexOf(y)}}].text = buttonName" ng-model=buttonName ng-init="buttonName = '{{y.text}}'" value="{{y.text}}"> </div>
                             <form name=myform>
-                                <div style="padding-left: 5px;padding-right: 5px;"><i class="fa fa-times pos-abs invalid" ng-show="myform.Url.$error.pattern || (buttonName.length > 0 && (Url.length === NULL || Url.length === 0))" aria-hidden=true></i><i class="fa fa-check pos-abs success" ng-show="myform.Url.$valid && Url.length" aria-hidden=true></i>
-                                    <input class="form-control inputelems urlinput" placeholder="لینک دکمه" value="{{y.url}}" ng-change="btnsjson[{{btnsjson.indexOf(x)}}][{{x.indexOf(y)}}].url = Url" ng-model=Url name=Url ng-pattern="/^((?:http)s?:\/\/)(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:\/?|[\/?]\S+)$/i"> </div>
+                                <div style="padding-left: 5px;padding-right: 5px;"><!--<i class="fa fa-times pos-abs invalid" ng-show="myform.Url.$error.pattern || (buttonName.length > 0 && (Url.length === NULL || Url.length === 0))" aria-hidden=true></i><i class="fa fa-check pos-abs success" ng-show="myform.Url.$valid && Url.length" aria-hidden=true></i>-->
+                                    <input class="form-control inputelems urlinput " placeholder="لینک دکمه" value="{{y.url}}" ng-change="btnsjson[{{btnsjson.indexOf(x)}}][{{x.indexOf(y)}}].url = Url" ng-model=Url name=Url ng-init="Url = '{{y.url}}'"> <!-- ng-pattern="/^(IP_PROXY)$|^(PROXY)$|^((?:http)s?:\/\/)(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:\/?|[\/?]\S+)$/i"> --></div>
                             </form>
                         </div>
                     </div>
@@ -77,14 +78,17 @@
                 <br>1. نام دکمه : همان متنی است که روی دکمه نوشته میشود
                 <br>2. لینک دکمه : آدرسی است که کاربر با کلیک بر روی آن دکمه به آن منتقل میشود.
                 <br>این لینک میتواند آدرس یک کانال باشد مثل
-                <br><a style="float: left;" href="https://t.me/PvResan">https://t.me/PvResan</a>
+                <br><a style="float: left;" href="https://t.me/DigitalFreedomGroup">https://t.me/DigitalFreedomGroup</a>
                 <br>یا به صورت لینک دعوت کانال :
                 <br><a style="float: left;" href="https://t.me/joinchat/C_A9z0U5TiFkMzx3Mw">https://t.me/joinchat/C_A9z0U5TiFkMzx3Mw</a>
                 <br>یا به صورت لینک یک سایت باشد :
-                <br><a style="float: left;" href="https://feelthecode.com">https://feelthecode.com</a>
+                <br><a style="float: left;" href="https://google.com">https://google.com</a>
+                <br>یا بیرای قرار دادن لینک پروکسی با ساب دامنه رندم :
+                <br><a style="float: left;" href="">PROXY</a>
+                <br>یا بیرای قرار دادن لینک پروکسی با آیپی :
+                <br><a style="float: left;" href="">IP_PROXY</a>
                 <br>
-                <br><span class=uk-text-danger>نکته مهم </span>اینکه لینک دکمه شما باید با //:http یا ://https شروع شود.
-                <br>علامت <i class="fa fa-check pos-abs success" style="position:static;margin-right:0px;margin-top:0px;" aria-hidden=true></i> به این معناست که محتوای فیلد تایید شده است و قابل قبول است وعلامت <i class="fa fa-times pos-abs invalid" style="position:static;margin-right:0px;margin-top:0px;" aria-hidden=true></i> به این معنی است که متن فیلد غیر قابل قبول است و برای ساخت کد باید به شکل صحیح ویرایش شود.
+                <br><span class=uk-text-danger>نکته مهم </span>اینکه لینک دکمه شما باید با //:http یا ://https شروع شود یا برابر با PROXY و IP_PROXY باشد (برای قرار دادن پروکسی).
                 <br>
                 <br>زمانی که دکمه ها را طراحی کردید میتوانید با استفاده از گزینه "ساخت کد" که در پایین دکمه ها قرار دارد کد دکمه را دریافت و در ربات خود وارد کنید.
                 <br>و همچنین با استفاده از دکمه <i class="fa fa-refresh rotating" aria-hidden=true></i> میتوانید دکمه های ساخته شده را حذف و از نو دوباره دکمه ها را چینش کنید.
@@ -93,6 +97,7 @@
     </div>
 </div>
 <script type="text/javascript" src="script.js"></script>
+<center><a href="https://feelthecode.com">feelthecode.com</a> : منبع اسکریپت</center>
 </body>
 <script>
     if ('serviceWorker' in navigator) {

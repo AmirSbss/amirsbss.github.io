@@ -17042,24 +17042,52 @@ window.angular
                 e
         );
     });
+/*var parts = window.location.search.substr(1).split("&");
+var $_GET = {
+    json: '[[{"text":"","url":""}]]'
+};
+for (var i = 0; i < parts.length; i++) {
+    var temp = parts[i].split("=");
+    $_GET[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+}*/
+window.$_GET = location.search.substr(1).split("&").reduce((o, i) => (u = decodeURIComponent, [k, v] = i.split("="), o[u(k)] = v && u(v), o), {});
+if (window.$_GET.json) {
+    btnsjson = JSON.parse(window.$_GET.json);
+    isChecked = [];
+    for (var i = 0; i <= btnsjson.length - 1; i++) {
+        isChecked.push("inputs uk-form-row uk-width-1-" + btnsjson[i].length);
+    }
+} else {
+    btnsjson = [[{text: "", url: ""}]];
+    isChecked = [];
+    isChecked[0] = "inputs uk-form-row uk-width-1-1";
+}
 var app = angular.module("MyBtns", ["ngAnimate"]);
 app.controller("PlayerController", [
     "$scope",
     "$timeout",
     function (t, e) {
-        (t.btnsjson = [[{ text: "", url: "" }]]),
-            (t.isChecked = []),
-            (t.isChecked[0] = "inputs uk-form-row uk-width-1-1"),
+        (t.btnsjson = btnsjson),
+            (t.isChecked = isChecked),
             (t.removeBtn = function (e) {
                 if (((t.this_el = e.currentTarget), ($name = e.target.getAttribute("data_index")), ($array_in_first = $name.split(" ")), t.btnsjson[$array_in_first[0]].length > 1))
                     t.btnsjson[$array_in_first[0]].splice($array_in_first[1], 1), ($count = t.btnsjson[$array_in_first[0]].length), (t.isChecked[$array_in_first[0]] = "inputs uk-form-row uk-width-1-" + $count);
                 else if (0 != $array_in_first[0] && 1 == t.btnsjson[$array_in_first[0]].length) {
-                    if (void 0 !== t.isChecked[Number($array_in_first[0]) + 1]) for ($i = $array_in_first[0]; void 0 !== t.isChecked[Number($i) + 1]; ) (t.isChecked[$i] = t.isChecked[Number($i) + 1]), ($i = Number($i) + 1);
+                    if (void 0 !== t.isChecked[Number($array_in_first[0]) + 1]) for ($i = $array_in_first[0]; void 0 !== t.isChecked[Number($i) + 1];) (t.isChecked[$i] = t.isChecked[Number($i) + 1]), ($i = Number($i) + 1);
                     t.btnsjson.splice($array_in_first[0], 1);
-                } else iziToast.error({ timeout: 3500, title: "خطا", message: "این دکمه به صورت پیش فرض اضافه شده و قابل حذف کردن نیست!", position: "bottomCenter", rtl: !0 });
+                } else iziToast.error({
+                    timeout: 3500,
+                    title: "خطا",
+                    message: "این دکمه به صورت پیش فرض اضافه شده و قابل حذف کردن نیست!",
+                    position: "bottomCenter",
+                    rtl: !0
+                });
             }),
             (t.ArrayClear = function () {
-                (t.btnsjson = [[{ text: "", url: "" }]]), (t.isChecked = []), (t.isChecked[0] = "inputs uk-form-row uk-width-1-1");
+                (t.btnsjson = [[{
+                    text: "عنوان دکمه",
+                    url: "لینک دکمه"
+                }]]), (t.isChecked = []), (t.isChecked[0] = "inputs uk-form-row uk-width-1-1");
             }),
             (t.addBtn = function (n) {
                 (t.this_el = n.currentTarget),
@@ -17084,8 +17112,14 @@ app.controller("PlayerController", [
                     if (e[n].length > 0) {
                         for (var i = 0; i < e[n].length; i++)
                             if ("" === e[n][i].text) (e[n][i].text = i), $must_be_delete.push(n + " " + i);
-                            else if ("" == e[n][i].url || 0 === e[n][i].url.length || null === e[n][i].url.length)
-                                return iziToast.error({ timeout: 3500, title: "خطا", message: "یکی از لینک های دکمه های ساخته شده معتبر نیست!", position: "bottomCenter", rtl: !0 });
+                            else if ("" == e[n][i].url || 0 === e[n][i].url.length || null === e[n][i].url.length || !/^(IP_PROXY)$|^(PROXY)$|^((?:http)s?:\/\/)(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:\/?|[\/?]\S+)$/i.test(e[n][i].url))
+                                return iziToast.error({
+                                    timeout: 3500,
+                                    title: "خطا",
+                                    message: "یکی از لینک های دکمه های ساخته شده معتبر نیست!",
+                                    position: "bottomCenter",
+                                    rtl: !0
+                                });
                         0 === e[n].length && e.splice(n, 1);
                     }
                 for (n = $must_be_delete.length; n--; ) ($array_in_first = $must_be_delete[n].split(" ")), e[$array_in_first[0]].splice($array_in_first[1], 1);
@@ -17096,8 +17130,15 @@ app.controller("PlayerController", [
                             ($NoBtn = !1), (r += "\n");
                             for (i = 0; i < e[n].length; i++) e[n][i].text.length > 0 && (r += e[n][i].url + "," + e[n][i].text), e[n].length - 1 > i && "" != e[n][i + 1].text && null !== e[n][i + 1].text && (r += "-");
                         }
-                    if (0 != $NoBtn) return iziToast.error({ timeout: 3500, title: "خطا", message: "دکمه ای طراحی نشده!", position: "bottomCenter", rtl: !0 });
-                    (r = "=={" + r + "\n}==").replace(/\n\n/g, ""), $("#CodeHere").val(r), (t.CodeHere = r), UIkit.modal("#modal", { center: !0 }).show();
+                    if (0 != $NoBtn) return iziToast.error({
+                        timeout: 3500,
+                        title: "خطا",
+                        message: "دکمه ای طراحی نشده!",
+                        position: "bottomCenter",
+                        rtl: !0
+                    });
+                    // (r = "=={" + r + "\n}==").replace(/\n\n/g, ""), $("#CodeHere").val(r), (t.CodeHere = r), UIkit.modal("#modal", { center: !0 }).show();
+                    (r = JSON.stringify(e)), $("#CodeHere").val(r), (t.CodeHere = r), UIkit.modal("#modal", {center: !0}).show();
                 }
             }),
             (t.CopyTheCode = function () {
