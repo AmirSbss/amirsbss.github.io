@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ساخت دکمه شیشه ای پی وی رسان</title>
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet type="text/css" href="style.css">
+
+<body ng-app=MyBtns ng-controller=PlayerController>
+<div class=bg></div>
+<br>
+<br>
+<div id=bodycontrol style="max-width: 900px;margin:0px auto; ">
+    <div ng-repeat="x in btnsjson" class=btnsjson>
+        <div class="uk-grid uk-grid-small uk-container" style="margin-left: -15px;margin-right: -15px;display: flex;justify-content: space-around;align-items: center;flex-wrap: wrap;" data-uk-grid-margin="">
+            <button type=button class="controllers uk-position-center-left" ng-click="addBtn($event)" data_index="l {{btnsjson.indexOf(x)}}"><i class="fa fa-plus" aria-hidden=true></i></button>
+            <div class=uk-position-center style="width: 60%;max-width: 600px;padding-left: 0px;">
+                <div ng-animate="'animate'" ng-repeat="y in x" class=innerinputs uk-grid>
+                    <div class="{{isChecked[btnsjson.indexOf(x)]}}">
+                        <div class=border><i class="fa fa-times closebtn" aria-hidden=true ng-click="removeBtn($event)" data_index="{{btnsjson.indexOf(x)}} {{x.indexOf(y)}}"></i>
+                            <div style="padding-left: 5px;padding-right: 5px;"><i class="fa fa-check pos-abs success" ng-show=buttonName.length aria-hidden=true></i>
+                                <input class="form-control inputelems" placeholder="عنوان دکمه" value="{{y.text}}" name=buttonName ng-change="btnsjson[{{btnsjson.indexOf(x)}}][{{x.indexOf(y)}}].text = buttonName" ng-model=buttonName> </div>
+                            <form name=myform>
+                                <div style="padding-left: 5px;padding-right: 5px;"><i class="fa fa-times pos-abs invalid" ng-show="myform.Url.$error.pattern || (buttonName.length > 0 && (Url.length === NULL || Url.length === 0))" aria-hidden=true></i><i class="fa fa-check pos-abs success" ng-show="myform.Url.$valid && Url.length" aria-hidden=true></i>
+                                    <input class="form-control inputelems urlinput" placeholder="لینک دکمه" value="{{y.url}}" ng-change="btnsjson[{{btnsjson.indexOf(x)}}][{{x.indexOf(y)}}].url = Url" ng-model=Url name=Url ng-pattern="/^((?:http)s?:\/\/)(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:\/?|[\/?]\S+)$/i"> </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type=button class="controllers uk-position-center-right" ng-click="addBtn($event)" data_index="r {{btnsjson.indexOf(x)}}"><i class="fa fa-plus" aria-hidden=true></i></button>
+        </div>
+    </div>
+    <div class="uk-width-small-2-4 uk-container-center uk-container">
+        <button type=button class="buttom uk-width-small-1-1" ng-click="addBtn($event)" data_index="b {{btnsjson.indexOf(x)}}"><i class="fa fa-plus" aria-hidden=true></i></button>
+        <div class="uk-width-small-3-4 uk-container-center uk-container uk-width-small-1-1">
+            <button type=button ng-click="getJson()" class=GetJson style="width:74%;">ایجاد کد <i class="fa fa-cog rotating" aria-hidden=true></i></button>
+            <button type=button data-uk-modal="{target:'#confirm',center:true}" class=GetJson style="float: right;width:24%;"><i class="fa fa-refresh rotating" aria-hidden=true></i></button>
+            <button type=button class="uk-width-small-1-1 GetJson" data-uk-modal="{target:'#descriptions',center:true}">راهنما</button>
+        </div>
+    </div>
+</div>
+<div id=modal class=uk-modal style="display: none; overflow-y: scroll;" data-uk-modal="{center:true}" aria-hidden=true>
+    <div class=uk-modal-dialog style="">
+        <a href="" class="uk-modal-close uk-close" style="float: left;font-size: 21px;"></a>
+        <h1>کد دکمه شما آمادست!</h1><pre id=CodeHere>{{CodeHere}}</pre>
+        <div class=uk-modal-footer>
+            <p class=uk-text-center>
+                <button class=uk-button style="width: 100px;" ng-click="CopyTheCode()">کپی</button>
+            </p>
+        </div>
+    </div>
+</div>
+<div id=confirm class=uk-modal style="display: none; overflow-y: scroll;" aria-hidden=true>
+    <div class=uk-modal-dialog style="">
+        <h1 class=uk-modal-title>آیا از حذف دکمه ها اطمینان دارید ؟</h1>
+        <p>این کار غیر قابل بازگشت است.</p>
+        <p class=uk-text-center>
+            <button class="uk-button uk-button-success uk-modal-close" ng-click="ArrayClear()" type=button>بـلـه</button>
+            <button class="uk-button uk-button-danger uk-modal-close" type=button>انصراف</button>
+        </p>
+    </div>
+</div>
+<div id=descriptions class=uk-modal>
+    <div class="uk-modal-dialog uk-width-1-1">
+        <a href="" class="uk-modal-close uk-close uk-hidden-small" style="left:10px;;font-size: 21px;"></a>
+        <div class="uk-width-small-1-1 uk-container-center" style="max-width:800px;direction:rtl;padding:10px;">
+            <a href="" class="uk-modal-close uk-close uk-visible-small " style="float:left;font-size: 21px;"></a>
+            <h3 class=iransans>توضیحات :</h3>
+            <hr>
+            <p class=iransans style="line-height:25px;">با این سرویس شما میتوانید به سادگی کد دکمه های ربات پیوی رسان خود را با شکلی زیبا بسازید.
+                <br>بدین شکل که هر دکمه تشکیل شده از
+                <br>■ نام دکمه
+                <br>■ لینک دکمه
+                <br>1. نام دکمه : همان متنی است که روی دکمه نوشته میشود
+                <br>2. لینک دکمه : آدرسی است که کاربر با کلیک بر روی آن دکمه به آن منتقل میشود.
+                <br>این لینک میتواند آدرس یک کانال باشد مثل
+                <br><a style="float: left;" href="https://t.me/PvResan">https://t.me/PvResan</a>
+                <br>یا به صورت لینک دعوت کانال :
+                <br><a style="float: left;" href="https://t.me/joinchat/C_A9z0U5TiFkMzx3Mw">https://t.me/joinchat/C_A9z0U5TiFkMzx3Mw</a>
+                <br>یا به صورت لینک یک سایت باشد :
+                <br><a style="float: left;" href="https://feelthecode.com">https://feelthecode.com</a>
+                <br>
+                <br><span class=uk-text-danger>نکته مهم </span>اینکه لینک دکمه شما باید با //:http یا ://https شروع شود.
+                <br>علامت <i class="fa fa-check pos-abs success" style="position:static;margin-right:0px;margin-top:0px;" aria-hidden=true></i> به این معناست که محتوای فیلد تایید شده است و قابل قبول است وعلامت <i class="fa fa-times pos-abs invalid" style="position:static;margin-right:0px;margin-top:0px;" aria-hidden=true></i> به این معنی است که متن فیلد غیر قابل قبول است و برای ساخت کد باید به شکل صحیح ویرایش شود.
+                <br>
+                <br>زمانی که دکمه ها را طراحی کردید میتوانید با استفاده از گزینه "ساخت کد" که در پایین دکمه ها قرار دارد کد دکمه را دریافت و در ربات خود وارد کنید.
+                <br>و همچنین با استفاده از دکمه <i class="fa fa-refresh rotating" aria-hidden=true></i> میتوانید دکمه های ساخته شده را حذف و از نو دوباره دکمه ها را چینش کنید.
+                <br> </p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="script.js"></script>
+</body>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js');
+    }
+    var iconUrl = 'https://www.seeklogo.net/wp-content/uploads/2014/10/Google-Chrome-logo-vector-download.png';
+    var imgElement = document.createElement('img');
+    imgElement.src = iconUrl;
+
+</script>
+
+</html>
